@@ -1,0 +1,129 @@
+<template>
+    <lightning-record-edit-form
+        object-api-name="Account"
+        onsubmit={handleSubmit}
+        onsuccess={handleSuccess}
+    >
+        <lightning-messages></lightning-messages>
+
+        <!-- Account Name -->
+        <lightning-input-field field-name="Name"></lightning-input-field>
+
+        <!-- Hidden Multi-Select Field -->
+        <lightning-input-field
+            field-name="Services__c"
+            value={selectedValuesString}
+            class="slds-hide"
+        ></lightning-input-field>
+
+        <!-- Multi-Select Picklist (SLDS) -->
+        <div class="slds-form-element slds-m-top_medium">
+            <label class="slds-form-element__label" for="services-input">
+                Services
+            </label>
+
+            <div class="slds-combobox_container">
+                <div
+                    class={comboboxClass}
+                    aria-expanded={isOpen}
+                    aria-haspopup="listbox"
+                    role="combobox"
+                >
+                    <!-- Input Area -->
+                    <div
+                        class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right"
+                        role="none"
+                        onclick={toggleDropdown}
+                    >
+                        <div
+                            id="services-input"
+                            class="slds-input pill-input"
+                        >
+                            <template for:each={selectedOptions} for:item="opt">
+                                <lightning-pill
+                                    key={opt.value}
+                                    label={opt.label}
+                                    name={opt.value}
+                                    onremove={handleRemove}
+                                ></lightning-pill>
+                            </template>
+
+                            <span
+                                if:true={showPlaceholder}
+                                class="slds-text-color_weak"
+                            >
+                                Select an option
+                            </span>
+                        </div>
+
+                        <span class="slds-icon_container slds-input__icon slds-input__icon_right">
+                            <lightning-icon
+                                icon-name="utility:down"
+                                size="x-small"
+                                alternative-text="Show options"
+                            ></lightning-icon>
+                        </span>
+                    </div>
+
+                    <!-- Dropdown -->
+                    <div
+                        if:true={isOpen}
+                        class="slds-dropdown slds-dropdown_fluid"
+                        role="listbox"
+                    >
+                        <ul
+                            class="slds-listbox slds-listbox_vertical"
+                            role="presentation"
+                        >
+                            <template for:each={options} for:item="option">
+                                <li
+                                    key={option.value}
+                                    class="slds-listbox__item"
+                                    role="presentation"
+                                    data-value={option.value}
+                                    onclick={handleOptionSelect}
+                                >
+                                    <div
+                                        class="slds-media slds-listbox__option slds-listbox__option_plain"
+                                        role="option"
+                                        aria-selected={option.selected}
+                                    >
+                                        <span class="slds-media__figure">
+                                            <template if:true={option.selected}>
+                                                <lightning-icon
+                                                    icon-name="utility:check"
+                                                    size="x-small"
+                                                ></lightning-icon>
+                                            </template>
+                                        </span>
+                                        <span class="slds-media__body">
+                                            <span class="slds-truncate">
+                                                {option.label}
+                                            </span>
+                                        </span>
+                                    </div>
+                                </li>
+                            </template>
+
+                            <template if:true={noOptions}>
+                                <li class="slds-listbox__item">
+                                    <div class="slds-text-color_weak slds-p-around_small">
+                                        No options available
+                                    </div>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-m-top_medium">
+            <lightning-button
+                variant="brand"
+                type="submit"
+                label="Save"
+            ></lightning-button>
+        </div>
+    </lightning-record-edit-form>
+</template>

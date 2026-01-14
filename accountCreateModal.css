@@ -1,0 +1,13 @@
+.pill-input {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem;
+    min-height: 2rem;
+    padding: 0 0.5rem;
+}
+
+.slds-dropdown {
+    max-height: 240px;
+    overflow-y: auto;
+}
